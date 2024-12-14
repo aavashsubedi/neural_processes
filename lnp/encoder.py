@@ -31,7 +31,7 @@ class DeterministicEncoder(nn.Module):
 
         represnetations = x.view(batch_size, set_size, -1)
         #so we keep [batch_size, -1]
-        
+        import pdb; pdb.set_trace()
         aggregated_representation = torch.mean(represnetations, dim=1) 
 
         return aggregated_representation
@@ -50,7 +50,7 @@ class LatentEncoder(nn.Module):
         self.fc3 = nn.Linear(128, 128)
         #self.penultiamte layer needed her that outputs the shape
         #(last_layer_size + self.num_latets) / 2
-    
+        self.penultimate = nn.Linear(128, 128)
 
         #second shape is the input to the decoder. Or the number of latents
         self.mu_linear = nn.Linear(128, 128)
@@ -68,10 +68,10 @@ class LatentEncoder(nn.Module):
         x = torch.relu(self.fc1(encoder_data))
         x = torch.relu(self.fc2(x))
         x = torch.relu(self.fc3(x))
-
         x = x.view(batch_size, set_size, -1)
         #take mean over samples
-        x = torch.mean(x, dim=1)
+        x = torch.mean(x, dim=1) #mean across all contexts, retuns shape [batch_size, -1]
+        x = torch.relu(self.penultimate(x))
         mu = self.mu_linear(x)
         log_sigma = self.sigma_linear(x)
         
@@ -90,6 +90,7 @@ class LatentOnlyDecoder(nn.Module):
         self.fc1 = nn.Linear(129, 128)
         self.fc2 = nn.Linear(128, 128)
         self.fc3 = nn.Linear(128, 128)
+        #output is the dim_prediction * 2 (for mean and variance).
         self.fc4 = nn.Linear(128, 2)
         
     def forward(self, representations, target_x):
@@ -112,9 +113,8 @@ class LatentOnlyDecoder(nn.Module):
         x = torch.relu(self.fc3(x))
         x = self.fc4(x)
         x = x.view(batch_size, filter_size, -1)
-
         mu, log_sigma = x.split(1, dim=-1)
-        sigma = 0.05 + 0.9 * nn.functional.softplus(log_sigma) #softplus is a smooth relu
+        sigma = 0.1 + 0.9 * nn.functional.softplus(log_sigma) #softplus is a smooth relu
         distribution = torch.distributions.Normal(mu, sigma)
         return distribution, mu, sigma
 
@@ -159,6 +159,7 @@ class LNP(nn.Module):
 
             #not sure about this part?
             kl = torch.distributions.kl.kl_divergence(posterior, prior_dist).sum(axis=-1, keepdim=True) 
+            #repeat kl for each target based on the batch size
             loss = -torch.mean(log_p - kl / target_x.size(1))
         else:
             log_p, kl, loss = None, None, None

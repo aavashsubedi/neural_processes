@@ -5,7 +5,7 @@ import collections
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader, Dataset
 from dataloader import GPCurvesReader, CNPRegressionDescription
-from encoder import Encoder, Decoder, CNP
+from encoder import LNP
 
 
 def train():
@@ -20,7 +20,7 @@ def train():
 
     d_x, d_in, representation_size, d_out = 1, 2, 128, 2
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = CNP().to(device)
+    model = LNP().to(device)
     optimizer = optim.Adam(model.parameters(), lr=3e-4)
 
     for epoch in range(100):
@@ -38,10 +38,8 @@ def train():
                 target_x = target_x.to(device)
                 target_y = target_y.to(device)
 
-                dist, mu, sigma = model(context_x, context_y, target_x)
-                log_p = dist.log_prob(target_y)
-                import pdb; pdb.set_trace()
-                loss = -log_p.mean()
+                mu, sigma, log_p, kl, loss = model(context_x, context_y, target_x,
+                                                   target_y)    
                 loss.backward()
                 optimizer.step()
                 total_loss += loss.item()
@@ -56,9 +54,8 @@ def train():
                 context_y = context_y.to(device)
                 target_x = target_x.to(device)
                 target_y = target_y.to(device)
-                dist, mu, sigma = model(context_x, context_y, target_x)
-                log_p = dist.log_prob(target_y)
-                loss = -log_p.mean()
+                mu, sigma, log_p, kl, loss = model(context_x, context_y, target_x,
+                                                   target_y)   
                 print(f"Test Loss: {loss.item()}")
     
     

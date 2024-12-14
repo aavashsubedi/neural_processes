@@ -40,7 +40,6 @@ def train():
 
                 dist, mu, sigma = model(context_x, context_y, target_x)
                 log_p = dist.log_prob(target_y)
-                import pdb; pdb.set_trace()
                 loss = -log_p.mean()
                 loss.backward()
                 optimizer.step()
