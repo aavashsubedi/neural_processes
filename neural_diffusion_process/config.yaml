@@ -1,0 +1,46 @@
+project_name: neural_dp
+run_name: "initial_run"
+
+#wandb 
+metric: loss
+wandb: online
+tracking_metric: loss
+
+#Diffusion 
+
+schedule: "cosine"
+beta_start: 3e-4
+beta_end: 0.5
+timesteps: 500
+trained_variance: False
+use_cosine: False
+noise_steps: 1000
+
+#optimizer
+num_warmup_epochs: 20
+num_decay_epochs: 200
+int_lr: 2e-5
+peak_lr: 1e-3
+end_lr: 1e-5
+ema_rate: 0.995 #0.999
+lr: 1e-3
+
+#network config
+n_layers: 4
+hidden_dim: 64
+num_heads: 8
+sparse_attention: False
+
+
+#eval config
+num_samples: 128
+evaluate: False
+
+seed: 42
+dataset: "mnist"
+data_dir: "/home/users/asubedi/neural_processes/neural_processes/dataset/mnist_train"
+batch_size: 32
+num_epochs: 100
+loss_type: "mse"
+img_size: 28
+bw: True

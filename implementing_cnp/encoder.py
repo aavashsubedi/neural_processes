@@ -81,6 +81,5 @@ class CNP(nn.Module):
         aggregated_representation = self.encoder(context_x, context_y)
         #get the distribution
         distribution, mu, sigma = self.decoder(aggregated_representation, target_x)
-        log_p = dist.log_prob(target_y) #computes the log probability of the target_y given the distribution
 
         return distribution, mu, sigma

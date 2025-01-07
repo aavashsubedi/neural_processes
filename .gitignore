@@ -1,0 +1,14 @@
+neural_diffusiion_process/wandb
+neural_diffusiion_process/working_dir
+*.pyc
+attention_lnp/__pycache__
+implementing_attentional_cnp/__pycache__
+neural_diffusion_process/outputs
+neural_diffusion_process/wandb
+neural_diffusion_process/working_dir
+neural_diffusion_process/__pycache__
+lnp/__pycache__
+implementing_convcnp/__pycache__
+implementing_cnp/__pycache__
+implementing_attentional_cnp/__pycache__
+attention_lnp/__pycache__

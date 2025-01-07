@@ -11,23 +11,23 @@ from encoder import Encoder, Decoder, CNP
 def train():
 
     dataset_train = GPCurvesReader(
-        batch_size=64, max_num_context=10, x_size=1, y_size=1
+        batch_size=1280, max_num_context=10, x_size=1, y_size=1
     )
 
     dataset_test = GPCurvesReader(
-        batch_size=128, max_num_context=400, x_size=1, y_size=1, testing=True
+        batch_size=128, max_num_context=30, x_size=1, y_size=1, testing=True
     )
 
     d_x, d_in, representation_size, d_out = 1, 2, 128, 2
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = CNP().to(device)
     optimizer = optim.Adam(model.parameters(), lr=3e-4)
-
+    import pdb; pdb.set_trace()
     for epoch in range(100):
             
             model.train()
             total_loss = 0
-            for i in range(1000):
+            for i in range(50):
                 optimizer.zero_grad()
                 data = dataset_train.generate_curves()
                 (context_x, context_y), target_x = data.query
@@ -40,7 +40,6 @@ def train():
 
                 dist, mu, sigma = model(context_x, context_y, target_x)
                 log_p = dist.log_prob(target_y)
-                import pdb; pdb.set_trace()
                 loss = -log_p.mean()
                 loss.backward()
                 optimizer.step()
