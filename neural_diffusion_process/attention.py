@@ -130,6 +130,7 @@ class AttentionModel(nn.Module):
     
     def __init__(self, cfg, out_dim: int=1, input_dim: int=2, 
                 init_zero=True):
+        
         super().__init__()
         self.cfg = cfg
         hidden_dim = self.cfg.hidden_dim
@@ -155,7 +156,19 @@ class AttentionModel(nn.Module):
         """
         Computes the additive noise that was added to `y_0` to obtian `y_t`
         based on x_t, y_t and t
+
+        "x: [batch_size, num_points, input_dim]",
+        "y: [batch_size, num_points, output_dim]",
+        "t: [batch_size]",
+        "mask: [batch_size, num_points] if mask is not None",
+        "return: [batch_size, num_points, output_dim]",
         """
+        assert x.shape[0] == y.shape[0] == t.shape[0]
+        assert x.shape[2] == y.shape[2]
+        if mask is not None:
+            assert mask.shape[0] == x.shape[0] and mask.shape[1] == x.shape[1]
+
+        del mask
         x = torch.concat([x, y], dim=-1).to(torch.float32)
         x = self.encoder(x)
         t = self.t_embedding(t)

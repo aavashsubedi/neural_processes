@@ -82,7 +82,7 @@ def get_data(image_size=28, dataset_name="mnist", path="dataset/mnist",
     return dataloader #maybe we can preprocess this alter.
 
 def get_context_mask(image_size=28, 
-                    context_typ: str="percent",
+                    context_type: str="percent",
                     p:float=0.5,
                     KEEP=33, NOT_KEEP=44):
 
@@ -95,20 +95,21 @@ def get_context_mask(image_size=28,
     - image_size: int, the size of the image
     - context_typ: str, the type of context mask to generate
     - p: float, the probability of masking a pixel
+
+    Returns:
+    mask: [N, num_points] tensor of context masks, where [N = batch_size, num_points = h*w]
     """
 
     x = torch.tensor(get_image_grid_inputs(image_size)) #[h*w, 2]
-    
+    import pdb; pdb.set_trace()
     if context_type == "horizontal":
-        mask = x[:, 1] > 0.0 #mask the right half of the image
+        condition = x[:, 1] > 0.0 #mask the right half of the image
     elif context_type == "vertical":
-        mask = x[:, 0]  < 0.0 #mask the top half of the image
+        condition = x[:, 0]  < 0.0 #mask the top half of the image
 
     elif "percent" in context_type:
-        contition = torch.rand(len(x)) < p
-
-    mask = torch.where(
-        condition,
-        KEEP * torch.ones_like(x[..., 0]),
-        NOT_KEEP * torch.ones_like(x[..., 0])
-    )
+        condition = torch.rand(len(x)) < p
+    
+    #if we keep the number , we set it to 33, and if we don't keep it, we set it to 44
+    mask = torch.where(condition, KEEP * torch.ones_like(x[..., 0]), NOT_KEEP * torch.ones_like(x[..., 0]))
+    return mask # [N,] why is it [N,] and not [N, output_dim]?

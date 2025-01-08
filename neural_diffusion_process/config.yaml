@@ -13,7 +13,7 @@ beta_start: 3e-4
 beta_end: 0.5
 timesteps: 500
 trained_variance: False
-use_cosine: False
+use_cosine: True
 noise_steps: 1000
 
 #optimizer
@@ -26,7 +26,7 @@ ema_rate: 0.995 #0.999
 lr: 1e-3
 
 #network config
-n_layers: 4
+n_layers: 8
 hidden_dim: 64
 num_heads: 8
 sparse_attention: False
@@ -35,11 +35,12 @@ sparse_attention: False
 #eval config
 num_samples: 128
 evaluate: False
-
+save_every: 20
 seed: 42
 dataset: "mnist"
-data_dir: "/home/users/asubedi/neural_processes/neural_processes/dataset/mnist_train"
-batch_size: 32
+data_dir: "/home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/working_dir/dataset/mnist_train"
+working_dir: "/home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/working_dir/"
+batch_size: 128
 num_epochs: 100
 loss_type: "mse"
 img_size: 28

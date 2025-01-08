@@ -33,25 +33,23 @@ class NDP(Diffusion_Base):
 
         return yt_minus_one
 
-    def sample(self, x, mask, model, outptut_dim=1, n=10000):
-
-        y_target = torch.randn_like((len(x), outptut_dim))
+    def sample(self, x, mask, model, output_dim=1, n=10000):
+        import pdb; pdb.set_trace()
+        y_target = torch.randn(len(x), output_dim)
 
         if mask is None:
             mask = torch.zeros_like(x[:, 0])
 
         def iter_func(y, t):
-            predicted_noise = model(x, t)
+            predicted_noise = model(x, y, t, mask=mask)
             y = self.ddpm_backward_step(predicted_noise, y, t)
             return y, None
 
-        t = (torch.ones(n) * i).long().to(self.device)
+        t = torch.linspace(1, self.noise_steps, self.noise_steps)
         for i in reversed(range(1, self.noise_steps)):
             y_target, _ = iter_func(y_target, t)
         return y_target
  
-    
-
     def conditional_sample(
         self, x, mask, *, x_context, y_context, 
         mask_context, model_fn, num_inner_steps: int=5, 
