@@ -27,3 +27,25 @@ def setup_wandb(cfg):
     #wandb.save('*.txt')
     #run.save()
     return cfg, run
+
+def plotting_function(x_grid, x_context, y_context, y_target):
+    """
+    x_grid: [b, h*w, 2]
+    x_context: [b, context h*w, 2]
+    y_context: [b, context h*w, 1]
+    y_target: [b, h*w, 1]
+    """
+    x_grid = x_grid[0, ...].cpu().numpy()
+    x_context = x_context[0, ...].cpu().numpy()
+    y_context = y_context[0, ...].cpu().numpy()
+    y_target = y_target[0, ...].cpu().numpy()
+
+    plt.figure(figsize=(8, 8))
+    plt.imshow(y_image, extent=[-2, 2, -2, 2], origin="lower", cmap='viridis')
+    plt.colorbar(label="Y-Values")
+    plt.scatter(x_context[:, 0], x_context[:, 1], c=y_context[:, 0], cmap='viridis', edgecolor='white', s=50, label="Context Points")
+    plt.title("Y-Values on Grid with Context Points")
+    plt.xlabel("X-axis")
+    plt.ylabel("Y-axis")
+    plt.legend()
+    plt.show()

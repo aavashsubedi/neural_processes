@@ -33,18 +33,18 @@ def get_rescale_func_fwd_inv(dataset_name="mnist"):
 class CustomDataset(torch.utils.data.Dataset):
     def __init__(self, dataset, input_grid, rescale_func):
         self.dataset = dataset
-        self.input_grid = input_grid
+        self.input_grid = input_grid #shape = [H * W, 2]
         #self.rescale_func = rescale_func
 
     def __len__(self):
         return len(self.dataset)
     def __getitem__(self, idx):
-
+        #img.shape: [1, 28, 28], label.shape: []
         img, label = self.dataset[idx]
-        img = img.view(-1, img.shape[0]) #Reshape to [H * W, C]
+        img = img.view(-1, img.shape[0], ) #Reshape to [H * W, C]
         y_values = img
 
-        return self.input_grid, y_values
+        return self.input_grid, y_values, label
 
 def get_data(image_size=28, dataset_name="mnist", path="dataset/mnist", 
     batch_size=32, num_epochs=1, bw=True):
@@ -101,7 +101,6 @@ def get_context_mask(image_size=28,
     """
 
     x = torch.tensor(get_image_grid_inputs(image_size)) #[h*w, 2]
-    import pdb; pdb.set_trace()
     if context_type == "horizontal":
         condition = x[:, 1] > 0.0 #mask the right half of the image
     elif context_type == "vertical":

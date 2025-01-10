@@ -4,14 +4,14 @@ from torchvision import datasets, transforms
 from torchvision.transforms import ToPILImage
 def mnist():
     # Define a directory to save the organized MNIST dataset
-    output_dir = '/home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/working_dir/dataset/mnist_train'
+    output_dir = '/home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/working_dir/dataset/mnist_test'
     os.makedirs(output_dir, exist_ok=True)
 
     # Define transformations (convert to tensor only)
     transform = transforms.Compose([transforms.ToTensor()])
 
     # Download the MNIST dataset
-    mnist_train = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
+    mnist_train = datasets.MNIST(root='./data', train=False, download=True, transform=transform)
     to_pil = ToPILImage()
 
     # Organize images by class labels

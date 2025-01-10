@@ -21,7 +21,7 @@ class EMA(nn.Module):
 		#resets current model
 		ema_model.load_state_dict(model.state_dict())
 
-	def step_ema(self, model, ema_model, step_start_ema=5000):
+	def step_ema(self, model, ema_model, step_start_ema=1000):
 		"""
 		step_start_ema: int, the step to start updating the ema model
 		"""

@@ -20,7 +20,7 @@ def sample_conditional(diffusion_process, model, x_grid):
     return x, y0, xc, yc
 
 
-def sample_n_conditionals(x_test, y_test, x_context,
+def sample_n_conditionals(x_test, x_context,
                  y_context, mask_context,
                 diffusion_process, model, n=10):
     
