@@ -1,0 +1,8 @@
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: asubedi. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.19.1
+wandb: Run data is saved locally in /home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/wandb/run-20250110_013706-rlzlmxhz
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run pious-yogurt-122
+wandb: ⭐️ View project at https://wandb.ai/asubedi/neural_dp
+wandb: 🚀 View run at https://wandb.ai/asubedi/neural_dp/runs/rlzlmxhz
