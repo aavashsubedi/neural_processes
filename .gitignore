@@ -12,4 +12,7 @@ implementing_convcnp/__pycache__
 implementing_cnp/__pycache__
 implementing_attentional_cnp/__pycache__
 attention_lnp/__pycache__
+neural_diffusion_process/logs/
 neural_diffusion_process/logs
+*.err
+*.out

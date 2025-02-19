@@ -45,7 +45,7 @@ class NDP(Diffusion_Base):
             return y, None
 
         t = torch.linspace(1, self.noise_steps, self.noise_steps)
-        for i in reversed(range(1, self.noise_steps)):
+        for i in reversed(range(1, self.noise_steps)): #this seems wrong, why are we giving t each time?
             y_target, _ = iter_func(y_target, t)
         return y_target
  
@@ -72,7 +72,7 @@ class NDP(Diffusion_Base):
         num_context = len(x_context[0]) #is this right? especially at [0]?
 
         def repaint_inner(yt_target, t):
-
+  
             yt_context = self.forward(y_context, t)[0] #y* 
             y_augmented = torch.concatenate([yt_context, yt_target], dim=1) #y* union y_t^c
             noise_hat = model_fn.forward(x=x_augmented,y=y_augmented, t=t, mask=mask_augmented)
@@ -112,4 +112,4 @@ class NDP(Diffusion_Base):
             y_target = repaint_outer(y_target, torch.tensor(i).to(x.device).repeat(shape_req[0]))
         
         y_target = (torch.clamp(y_target, -1, 1) + 1) / 2
-        return y_target
+        return y_target 

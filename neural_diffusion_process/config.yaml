@@ -1,5 +1,5 @@
-project_name: neural_dp
-run_name: "no_clamp"
+project_name: neural_fm
+run_name: "nfp"
 
 #wandb 
 metric: loss
@@ -8,18 +8,18 @@ tracking_metric: loss
 
 #Diffusion 
 
-schedule: "cosine"
+schedule: "linear"
 beta_start: 3e-4
 beta_end: 0.5
 timesteps: 500
 trained_variance: False
 use_cosine: True
-noise_steps: 1000
+noise_steps: 500
 
 #optimizer
 num_warmup_epochs: 20
 num_decay_epochs: 200
-init_lr: 2e-5 #original startsa as 2e-5
+init_lr: 2e-4 #original startsa as 2e-5
 peak_lr: 1e-3
 end_lr: 1e-5
 ema_rate: 0.995 #0.999
@@ -27,21 +27,23 @@ lr: 1e-3
 
 #network config
 n_layers: 4
-hidden_dim: 64
-num_heads: 8
+hidden_dim: 32
+num_heads: 4
 sparse_attention: False
 
 
 #eval config
 num_samples: 128
 evaluate: False
-save_every: 5
+save_every: 200
 seed: 42
 dataset: "mnist"
 data_dir: "/home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/working_dir/dataset/mnist_train"
+val_dir: "/home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/working_dir/dataset/mnist_test"
 working_dir: "/home/users/asubedi/neural_processes/neural_processes/neural_diffusion_process/working_dir/"
-batch_size: 256
-num_epochs: 100
+batch_size: 128
+num_epochs: 120
 loss_type: "mse"
 img_size: 28
 bw: True
+percentage: 0.55

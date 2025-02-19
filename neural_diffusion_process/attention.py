@@ -171,8 +171,9 @@ class AttentionModel(nn.Module):
 
         del mask
         x = torch.concat([x, y], dim=-1).to(torch.float32)
-        x = self.encoder(x)
+        x = self.encoder(x) #encoding func
         t = self.t_embedding(t)
+        #x = x + t
         skip = None
 
         for layer in self.layers:
